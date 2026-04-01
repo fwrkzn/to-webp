@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+found=0
+
+for img in *.png *.jpg *.jpeg *.PNG *.JPG *.JPEG; do
+  [ -e "$img" ] || continue
+  found=1
+
+  output="${img%.*}.webp"
+  echo "Converting $img -> $output"
+  cwebp -q 80 "$img" -o "$output"
+done
+
+if [ "$found" -eq 0 ]; then
+  echo "No PNG/JPG/JPEG files found in this folder."
+  exit 0
+fi
+
+echo "Done."
