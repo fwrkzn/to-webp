@@ -1,21 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -euo pipefail
-
-found=0
-
-for img in *.png *.jpg *.jpeg *.PNG *.JPG *.JPEG; do
+# Convert PNG, JPG, JPEG to WebP in current directory
+for img in *.png *.jpg *.jpeg; do
+  # Skip if no files match
   [ -e "$img" ] || continue
-  found=1
 
   output="${img%.*}.webp"
-  echo "Converting $img -> $output"
-  cwebp -q 80 "$img" -o "$output"
+
+  echo "Converting $img → $output"
+  
+  # The '&& rm "$img"' tells the script: 
+  # "If the previous command succeeded, delete the input file."
+  cwebp -q 80 "$img" -o "$output" && rm "$img"
 done
 
-if [ "$found" -eq 0 ]; then
-  echo "No PNG/JPG/JPEG files found in this folder."
-  exit 0
-fi
-
-echo "Done."
+echo "Done. Originals have been removed."
